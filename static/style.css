@@ -1,0 +1,838 @@
+
+/* =====================================
+   STEGOSECURE - MAIN STYLE
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #080d19;
+    color: #f5f7ff;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+
+/* =====================================
+   NAVBAR
+===================================== */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 8%;
+    border-bottom: 1px solid #202b40;
+    background: #080d19;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.logo > span:last-child {
+    color: #9a8cff;
+}
+
+.logo-icon {
+    background: #7866ef;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 9px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    color: #aab4c7;
+    font-size: 13px;
+}
+
+.nav-links a:hover {
+    color: #a99aff;
+}
+
+.nav-button {
+    padding: 10px 19px;
+    background: #7866ef;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =====================================
+   HERO SECTION
+===================================== */
+
+.hero {
+    min-height: 590px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 90px 12%;
+    gap: 60px;
+
+    background:
+        radial-gradient(
+            ellipse at 80% 45%,
+            #28235a 0%,
+            transparent 45%
+        ),
+        #080d19;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #a99aff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #62dbab;
+    border-radius: 50%;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 5vw, 61px);
+    line-height: 1.15;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+}
+
+.hero h1 span {
+    color: #9b89ff;
+}
+
+.hero-content > p {
+    color: #aab4c7;
+    max-width: 510px;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.primary-button,
+.secondary-button,
+.download-button {
+    border: none;
+    border-radius: 9px;
+    padding: 14px 22px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-block;
+    text-align: center;
+    transition: 0.25s;
+}
+
+.primary-button {
+    background: #7866ef;
+    color: white;
+}
+
+.primary-button:hover {
+    background: #9384ff;
+    transform: translateY(-2px);
+}
+
+.primary-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondary-button {
+    border: 1px solid #39435b;
+    color: white;
+    background: transparent;
+}
+
+.secondary-button:hover {
+    background: #182139;
+}
+
+.hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 35px;
+    color: #aab4c7;
+    font-size: 11px;
+}
+
+
+/* =====================================
+   HERO VISUAL
+===================================== */
+
+.hero-visual {
+    position: relative;
+    width: 330px;
+    flex-shrink: 0;
+}
+
+.visual-card {
+    background: #121b30;
+    border: 1px solid #384363;
+    border-radius: 17px;
+    padding: 20px;
+    box-shadow: 0 20px 70px #0008;
+}
+
+.visual-top,
+.visual-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #aab4c7;
+    letter-spacing: 1px;
+}
+
+.visual-dot {
+    width: 7px;
+    height: 7px;
+    background: #62dbab;
+    border-radius: 50%;
+}
+
+.lock-icon {
+    color: #a99aff;
+    font-size: 20px;
+}
+
+.visual-image {
+    margin: 20px 0;
+    height: 200px;
+    background: linear-gradient(135deg, #35346e, #171e39);
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-symbol {
+    font-size: 65px;
+    color: #b4a8ff;
+}
+
+.visual-image p {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.visual-image span {
+    font-size: 10px;
+    color: #aab4c7;
+}
+
+.visual-bottom strong {
+    color: #62dbab;
+}
+
+.floating-icon {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    background: #7866ef;
+    border-radius: 13px;
+    padding: 14px;
+    font-size: 23px;
+}
+
+
+/* =====================================
+   WORKSPACE
+===================================== */
+
+.workspace {
+    padding: 85px 10%;
+    background: #0c1323;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 42px;
+}
+
+.section-label {
+    color: #a99aff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    font-size: 30px;
+    margin: 12px 0;
+}
+
+.section-heading p {
+    color: #929eb4;
+    font-size: 13px;
+}
+
+
+/* =====================================
+   EMBED CARD
+===================================== */
+
+.tool-card {
+    max-width: 1050px;
+    margin: auto;
+    padding: 35px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+
+    background: #121b30;
+    border: 1px solid #27334a;
+    border-radius: 16px;
+}
+
+.field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 19px 0 10px;
+    color: #e6e9f5;
+}
+
+
+/* =====================================
+   UPLOAD AREA
+===================================== */
+
+.upload-area {
+    min-height: 155px;
+    border: 1.5px dashed #525d7c;
+    background: #18233a;
+    border-radius: 11px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.upload-area:hover {
+    border-color: #9b89ff;
+    background: #202b47;
+}
+
+.upload-icon {
+    font-size: 30px;
+    color: #a99aff;
+}
+
+.upload-area strong {
+    font-size: 13px;
+}
+
+.upload-area span {
+    font-size: 11px;
+    color: #929eb4;
+}
+
+.upload-area input {
+    display: none;
+}
+
+
+/* =====================================
+   FILE INFORMATION
+===================================== */
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 9px;
+    flex-wrap: wrap;
+}
+
+.file-info span {
+    font-size: 11px;
+    color: #62dbab;
+    overflow-wrap: anywhere;
+}
+
+.remove-image {
+    border: 1px solid #75404e;
+    background: #351c2b;
+    color: #ff899e;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.remove-image:hover {
+    background: #512537;
+}
+
+
+/* =====================================
+   INPUT & TEXTAREA
+===================================== */
+
+textarea,
+.form-column input[type="password"],
+.form-column #embedPassword,
+.extract-card input[type="password"] {
+    width: 100%;
+    padding: 13px;
+    background: #0c1425;
+    border: 1px solid #35415b;
+    color: white;
+    border-radius: 8px;
+    outline: none;
+    font-size: 12px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+textarea:focus,
+#embedPassword:focus,
+input[type="password"]:focus {
+    border-color: #9685ff;
+}
+
+.full-button {
+    width: 100%;
+    margin-top: 24px;
+}
+
+
+/* =====================================
+   IMAGE PREVIEW
+===================================== */
+
+.preview-box {
+    height: 170px;
+    border: 1px dashed #45516c;
+    background: #0c1425;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    color: #7e8aa2;
+    font-size: 12px;
+}
+
+.preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.result-preview {
+    border-color: #7866ef;
+}
+
+.preview-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 9px 0 15px;
+    color: #aab4c7;
+    font-size: 11px;
+}
+
+.preview-tag {
+    color: #a99aff;
+    font-weight: 700;
+}
+
+
+/* =====================================
+   DOWNLOAD BUTTON
+===================================== */
+
+.download-button {
+    width: 100%;
+    margin-top: 15px;
+    background: #1c795b;
+    color: white;
+}
+
+.download-button:hover {
+    background: #24956f;
+}
+
+
+/* =====================================
+   EXTRACT SECTION
+===================================== */
+
+.extract-section {
+    background: #080d19;
+}
+
+.extract-card {
+    max-width: 650px;
+    margin: auto;
+    padding: 35px;
+
+    background: #121b30;
+    border: 1px solid #27334a;
+    border-radius: 16px;
+}
+
+
+/* =====================================
+   EXTRACT IMAGE PREVIEW
+===================================== */
+
+.extract-preview-container {
+    margin-top: 15px;
+    padding: 12px;
+    background: #0c1425;
+    border: 1px solid #35415b;
+    border-radius: 10px;
+}
+
+.extract-preview-image {
+    width: 100%;
+    height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    background: #080d19;
+    border-radius: 8px;
+}
+
+.extract-preview-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.extract-image-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.extract-image-info div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 4px;
+}
+
+.extract-image-info strong {
+    font-size: 12px;
+    color: #f5f7ff;
+    overflow-wrap: anywhere;
+}
+
+.extract-image-info span {
+    font-size: 11px;
+    color: #929eb4;
+}
+
+
+/* =====================================
+   EXTRACTED MESSAGE
+===================================== */
+
+.message-result {
+    margin-top: 28px;
+}
+
+#extractedMessage {
+    min-height: 90px;
+    padding: 15px;
+    border: 1px solid #35415b;
+    background: #0c1425;
+    border-radius: 9px;
+    color: #929eb4;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+
+/* =====================================
+   NOTIFICATION
+===================================== */
+
+.notification {
+    padding: 12px 14px;
+    margin-top: 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.notification.success {
+    background: #12382e;
+    border: 1px solid #287b5d;
+    color: #7ce3b4;
+}
+
+.notification.error {
+    background: #3c202a;
+    border: 1px solid #8a4055;
+    color: #ff9caf;
+}
+
+.notification.info {
+    background: #1d2d50;
+    border: 1px solid #465f98;
+    color: #b4c8ff;
+}
+
+
+/* =====================================
+   LOADING ANIMATION
+===================================== */
+
+.loading-spinner {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 2px solid #ffffff66;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 7px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =====================================
+   HIDDEN CLASS
+===================================== */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+footer {
+    padding: 35px 8%;
+    border-top: 1px solid #202b40;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+footer p,
+.copyright {
+    color: #7e8aa2;
+    font-size: 11px;
+}
+
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 850px) {
+
+    .hero {
+        padding: 70px 7%;
+    }
+
+    .hero-visual {
+        width: 280px;
+    }
+
+    .tool-card {
+        gap: 25px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .navbar {
+        padding: 17px 5%;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 65px 7%;
+    }
+
+    .hero-visual {
+        width: 100%;
+        max-width: 330px;
+        align-self: center;
+    }
+
+    .hero h1 {
+        font-size: 39px;
+    }
+
+    .workspace {
+        padding: 65px 5%;
+    }
+
+    .section-heading h2 {
+        font-size: 24px;
+    }
+
+    .tool-card {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+    .extract-card {
+        padding: 22px;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+}
+
+
+/* =====================================
+   KEY TOOLS (generator kunci enkripsi)
+===================================== */
+
+.key-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.key-tools .secondary-button {
+    padding: 9px 14px;
+    font-size: 12px;
+}
+
+
+/* =====================================
+   PANEL EVALUASI (MSE, PSNR, SSIM)
+===================================== */
+
+.eval-panel {
+    margin-top: 16px;
+    padding: 16px;
+    background: #0c1425;
+    border: 1px solid #35415b;
+    border-radius: 10px;
+}
+
+.eval-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.eval-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.eval-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 1px solid #263149;
+    border-radius: 8px;
+}
+
+.eval-label {
+    font-size: 11px;
+    color: #8b97b3;
+}
+
+.eval-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #9685ff;
+}
+
+.eval-hint {
+    font-size: 10px;
+    color: #6f7b96;
+}
+
+.eval-panel.hidden {
+    display: none;
+}
