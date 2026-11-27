@@ -50,3 +50,15 @@ def plot_histogram(asli, stego, path="histogram.png"):
     ax[0].set_ylabel("Jumlah piksel")
     fig.tight_layout(); fig.savefig(path, dpi=150); plt.close(fig)
     return path
+
+
+def histogram_data(gambar):
+    """Histogram 256 bin per kanal. Urutan kunci tetap: R, G, B, Gray.
+    Gambar grayscale (2 dimensi) dianggap R = G = B."""
+    g = np.asarray(gambar)
+    if g.ndim == 2:
+        g = np.stack([g, g, g], axis=2)
+    r, gr, b = (g[..., i].astype(np.float64) for i in range(3))
+    gray = np.round(0.299 * r + 0.587 * gr + 0.114 * b).astype(np.uint8)
+    kanal = {"R": g[..., 0], "G": g[..., 1], "B": g[..., 2], "Gray": gray}
+    return {nama: np.bincount(k.ravel(), minlength=256).tolist() for nama, k in kanal.items()}

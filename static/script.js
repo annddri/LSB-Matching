@@ -24,11 +24,6 @@ const copyKeyButton = document.getElementById("copyKeyButton");
 const embedNotification = document.getElementById("embedNotification");
 
 const downloadButton = document.getElementById("downloadButton");
-const evalPanel = document.getElementById("evalPanel");
-const evalMse = document.getElementById("evalMse");
-const evalPsnr = document.getElementById("evalPsnr");
-const evalSsim = document.getElementById("evalSsim");
-const evalChanged = document.getElementById("evalChanged");
 
 
 // EXTRACT ELEMENTS
@@ -126,7 +121,6 @@ function resetEmbedPreview() {
         "<span>Stego image will appear here</span>";
 
     downloadButton.classList.add("hidden");
-    hideEvaluation();
 
     hideNotification(embedNotification);
 
@@ -239,7 +233,6 @@ embedImage.addEventListener("change", function () {
         "<span>Stego image will appear here</span>";
 
     downloadButton.classList.add("hidden");
-    hideEvaluation();
 
     hideNotification(embedNotification);
 
@@ -437,10 +430,6 @@ embedButton.addEventListener("click", async function () {
 
         downloadButton.classList.remove("hidden");
 
-        if (data.evaluasi) {
-            showEvaluation(data.evaluasi);
-        }
-
         showNotification(
             embedNotification,
             `Berhasil! Pesan terenkripsi (${data.payload_size} byte) disisipkan ke gambar PNG.`,
@@ -448,7 +437,6 @@ embedButton.addEventListener("click", async function () {
         );
     } catch (err) {
         showNotification(embedNotification, err.message, "error");
-        hideEvaluation();
     } finally {
         embedButton.disabled = false;
     }
@@ -565,34 +553,6 @@ window.addEventListener("beforeunload", function () {
 
 
 // =====================================
-// PANEL EVALUASI (MSE, PSNR, SSIM)
-// =====================================
-
-function formatEvaluation(e) {
-    return {
-        mse: e.mse.toFixed(6),
-        // PSNR bernilai null bila gambar identik (MSE = 0)
-        psnr: e.psnr === null ? "∞ (identik)" : e.psnr.toFixed(2) + " dB",
-        ssim: e.ssim.toFixed(6),
-        changed: e.piksel_berubah.toLocaleString("id-ID")
-    };
-}
-
-function showEvaluation(e) {
-    const f = formatEvaluation(e);
-    evalMse.textContent = f.mse;
-    evalPsnr.textContent = f.psnr;
-    evalSsim.textContent = f.ssim;
-    evalChanged.textContent = f.changed;
-    evalPanel.classList.remove("hidden");
-}
-
-function hideEvaluation() {
-    evalPanel.classList.add("hidden");
-}
-
-
-// =====================================
 // KEY TOOLS: BUAT, TAMPILKAN, SALIN KUNCI
 // =====================================
 
@@ -655,3 +615,281 @@ copyKeyButton.addEventListener("click", async function () {
         );
     }
 });
+
+
+// =====================================
+// EVALUATE: MSE, PSNR, SSIM, HISTOGRAM
+// =====================================
+
+const evalOriginalImage = document.getElementById("evalOriginalImage");
+const evalStegoImage = document.getElementById("evalStegoImage");
+const evalOriginalName = document.getElementById("evalOriginalName");
+const evalStegoName = document.getElementById("evalStegoName");
+const evaluateButton = document.getElementById("evaluateButton");
+const evalNotification = document.getElementById("evalNotification");
+const evalResult = document.getElementById("evalResult");
+
+const evalMse = document.getElementById("evalMse");
+const evalPsnr = document.getElementById("evalPsnr");
+const evalSsim = document.getElementById("evalSsim");
+const evalChanged = document.getElementById("evalChanged");
+const evalTotal = document.getElementById("evalTotal");
+const evalVerdict = document.getElementById("evalVerdict");
+
+// Hasil evaluasi terakhir (dipakai ulang saat kanal histogram diganti).
+let lastEvaluation = null;
+
+
+function checkEvalFile(file, allowedTypes, label) {
+    if (!allowedTypes.includes(file.type)) {
+        showNotification(
+            evalNotification,
+            `${label} harus berformat ${allowedTypes.map(t => t.split("/")[1].toUpperCase()).join(" atau ")}.`,
+            "error"
+        );
+        return false;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+        showNotification(evalNotification, `${label} maksimal 10 MB.`, "error");
+        return false;
+    }
+    hideNotification(evalNotification);
+    return true;
+}
+
+evalOriginalImage.addEventListener("change", function () {
+    const file = evalOriginalImage.files[0];
+    if (!file) return;
+    if (!checkEvalFile(file, ["image/png", "image/jpeg"], "Gambar asli")) {
+        evalOriginalImage.value = "";
+        evalOriginalName.textContent = "";
+        return;
+    }
+    evalOriginalName.textContent = `${file.name} (${formatFileSize(file.size)})`;
+});
+
+evalStegoImage.addEventListener("change", function () {
+    const file = evalStegoImage.files[0];
+    if (!file) return;
+    if (!checkEvalFile(file, ["image/png"], "Gambar stego")) {
+        evalStegoImage.value = "";
+        evalStegoName.textContent = "";
+        return;
+    }
+    evalStegoName.textContent = `${file.name} (${formatFileSize(file.size)})`;
+});
+
+
+function formatEvaluation(e) {
+    return {
+        mse: e.mse.toFixed(6),
+        // PSNR bernilai null bila gambar identik (MSE = 0)
+        psnr: e.psnr === null ? "∞ (identik)" : e.psnr.toFixed(2) + " dB",
+        ssim: e.ssim.toFixed(6),
+        changed: e.piksel_berubah.toLocaleString("id-ID")
+    };
+}
+
+function verdictText(e) {
+    if (e.psnr === null) return "Kedua gambar identik, tidak ada perubahan.";
+    if (e.psnr >= 40) return "PSNR di atas 40 dB: perubahan tidak terlihat oleh mata.";
+    if (e.psnr >= 30) return "PSNR 30–40 dB: perubahan kecil, mungkin terlihat di area polos.";
+    return "PSNR di bawah 30 dB: distorsi cukup terlihat.";
+}
+
+function showEvaluationResult(data) {
+    const e = data.evaluasi;
+    const f = formatEvaluation(e);
+
+    evalMse.textContent = f.mse;
+    evalPsnr.textContent = f.psnr;
+    evalSsim.textContent = f.ssim;
+    evalChanged.textContent = f.changed;
+
+    const totalNilai = data.ukuran.lebar * data.ukuran.tinggi * 3;
+    evalTotal.textContent = `dari ${totalNilai.toLocaleString("id-ID")} nilai piksel (${data.ukuran.lebar}×${data.ukuran.tinggi}, RGB)`;
+    evalVerdict.textContent = verdictText(e);
+
+    evalResult.classList.remove("hidden");
+}
+
+
+evaluateButton.addEventListener("click", async function () {
+    const original = evalOriginalImage.files[0];
+    const stego = evalStegoImage.files[0];
+
+    if (!original || !stego) {
+        showNotification(evalNotification, "Upload gambar asli dan gambar stego terlebih dahulu.", "error");
+        return;
+    }
+
+    evaluateButton.disabled = true;
+    showNotification(evalNotification, "Menghitung evaluasi...", "info");
+
+    try {
+        const formData = new FormData();
+        formData.append("original", original);
+        formData.append("stego", stego);
+
+        const response = await fetch("/api/evaluate", { method: "POST", body: formData });
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Gagal melakukan evaluasi.");
+        }
+
+        lastEvaluation = data;
+        showEvaluationResult(data);
+        drawHistogram();
+        showNotification(evalNotification, "Evaluasi selesai.", "success");
+    } catch (err) {
+        lastEvaluation = null;
+        evalResult.classList.add("hidden");
+        showNotification(evalNotification, err.message, "error");
+    } finally {
+        evaluateButton.disabled = false;
+    }
+});
+
+document.getElementById("channel-select").addEventListener("change", drawHistogram);
+
+
+function drawHistogram() {
+  if (!lastEvaluation) return;
+
+  const canvas = document.getElementById('histogram-chart');
+  const ctx = canvas.getContext('2d');
+
+  const w = canvas.width;
+  const h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Ambil kanal yang dipilih
+  const select = Number(
+    document.getElementById('channel-select').value
+  );
+
+  // Urutan kanal tetap, sesuai opsi di dropdown (0=R, 1=G, 2=B, 3=Gray)
+  const keys = ["R", "G", "B", "Gray"].filter(
+    k => k in lastEvaluation.histogram.original
+  );
+
+  const key = keys[Math.min(select, keys.length - 1)];
+
+  const original = lastEvaluation.histogram.original[key];
+  const stego = lastEvaluation.histogram.stego[key];
+
+  // Skala grafik
+  const max = Math.max(...original, ...stego, 1);
+
+  const left = 65;
+  const right = 20;
+  const top = 25;
+  const bottom = 45;
+
+  const plotW = w - left - right;
+  const plotH = h - top - bottom;
+
+  // Background putih
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid horizontal
+  ctx.strokeStyle = '#dce4df';
+  ctx.lineWidth = 1;
+
+  ctx.font = '12px Arial';
+  ctx.fillStyle = '#78858b';
+  ctx.textAlign = 'right';
+
+  for (let i = 0; i <= 4; i++) {
+    const y = top + (plotH * i / 4);
+
+    ctx.beginPath();
+    ctx.moveTo(left, y);
+    ctx.lineTo(w - right, y);
+    ctx.stroke();
+
+    const value = Math.round(max * (1 - i / 4));
+
+    ctx.fillText(
+      value.toLocaleString('id-ID'),
+      left - 10,
+      y + 4
+    );
+  }
+
+  // Label sumbu X: intensitas 0 sampai 255
+  ctx.textAlign = 'center';
+
+  [0, 64, 128, 192, 255].forEach(value => {
+    const x = left + (value / 255) * plotW;
+
+    ctx.fillText(
+      value.toString(),
+      x,
+      h - 17
+    );
+  });
+
+  // Label sumbu
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#46534d';
+  ctx.font = 'bold 12px Arial';
+  ctx.fillText(
+    'Intensitas piksel (0–255)',
+    left + plotW / 2,
+    h - 2
+  );
+
+  ctx.save();
+  ctx.translate(16, top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Frekuensi piksel', 0, 0);
+  ctx.restore();
+
+  // Fungsi menggambar garis histogram
+  function drawLine(values, color, dashed, width) {
+    ctx.beginPath();
+
+    values.forEach((value, index) => {
+      const x = left + (index / 255) * plotW;
+      const y = top + plotH - (value / max) * plotH;
+
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    ctx.setLineDash(dashed ? [7, 4] : []);
+
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Gambar Stego terlebih dahulu
+  drawLine(
+    stego,
+    '#18856e',
+    false,
+    2.3
+  );
+
+  // Gambar Asli di atas Stego agar tetap terlihat
+  drawLine(
+    original,
+    '#737f89',
+    true,
+    2.5
+  );
+
+  ctx.setLineDash([]);
+}

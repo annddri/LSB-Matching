@@ -10,10 +10,15 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-from evaluasi import evaluasi  # modul Orang 3 (MSE, PSNR, SSIM)
+from evaluasi import evaluasi, histogram_data  # modul Orang 3
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # Maksimal 10 MB sesuai validasi JS
+app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 2 gambar x 10 MB (halaman evaluasi)
+
+# Urutan kunci JSON dipertahankan (histogram: R, G, B, Gray), tidak diurutkan abjad.
+app.config["JSON_SORT_KEYS"] = False        # Flask < 2.3
+if hasattr(app, "json"):
+    app.json.sort_keys = False              # Flask >= 2.2
 
 MAGIC_HEADER = b"LSBM"
 
@@ -148,17 +153,10 @@ def api_embed():
         stego_img.save(buf, format="PNG")
         png_bytes = buf.getvalue()
 
-        # Semua gambar dinormalisasi ke RGB, jadi pembandingnya juga RGB
-        asli_rgb = np.array(img.convert("RGB"), dtype=np.uint8)
-        hasil = evaluasi(asli_rgb, np.array(stego_img, dtype=np.uint8))
-        if hasil["psnr"] == float("inf"):   # JSON standar tidak mengenal Infinity
-            hasil["psnr"] = None
-
         stego_b64 = base64.b64encode(png_bytes).decode("utf-8")
         return jsonify({
             "stego_image": f"data:image/png;base64,{stego_b64}",
-            "payload_size": len(encrypted_payload),
-            "evaluasi": hasil
+            "payload_size": len(encrypted_payload)
         })
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
@@ -189,6 +187,45 @@ def api_extract():
         return jsonify({
             "error": "Gagal mengekstrak pesan. Pastikan gambar berformat PNG asli dan password benar."
         }), 400
+
+
+
+@app.post("/api/evaluate")
+def api_evaluate():
+    """Membandingkan gambar asli dan gambar stego. Tidak ada yang disimpan di server."""
+    try:
+        if "original" not in request.files or "stego" not in request.files:
+            return jsonify({"error": "Upload gambar asli dan gambar stego terlebih dahulu."}), 400
+
+        original_file = request.files["original"]
+        stego_file = request.files["stego"]
+        if not original_file.filename or not stego_file.filename:
+            return jsonify({"error": "Upload gambar asli dan gambar stego terlebih dahulu."}), 400
+
+        # Semua gambar dinormalisasi ke RGB
+        asli = np.array(Image.open(original_file.stream).convert("RGB"), dtype=np.uint8)
+        stego = np.array(Image.open(stego_file.stream).convert("RGB"), dtype=np.uint8)
+
+        if asli.shape != stego.shape:
+            return jsonify({
+                "error": f"Ukuran gambar harus sama (asli {asli.shape[1]}x{asli.shape[0]}, "
+                         f"stego {stego.shape[1]}x{stego.shape[0]})."
+            }), 400
+
+        hasil = evaluasi(asli, stego)
+        if hasil["psnr"] == float("inf"):   # JSON standar tidak mengenal Infinity
+            hasil["psnr"] = None
+
+        return jsonify({
+            "evaluasi": hasil,
+            "ukuran": {"lebar": int(asli.shape[1]), "tinggi": int(asli.shape[0])},
+            "histogram": {
+                "original": histogram_data(asli),
+                "stego": histogram_data(stego)
+            }
+        })
+    except Exception:
+        return jsonify({"error": "Gagal membaca gambar. Pastikan kedua file adalah gambar PNG atau JPG yang valid."}), 400
 
 
 if __name__ == "__main__":
