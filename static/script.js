@@ -18,6 +18,12 @@ const removeEmbedImage = document.getElementById("removeEmbedImage");
 const secretMessage = document.getElementById("secretMessage");
 const embedPassword = document.getElementById("embedPassword");
 const embedButton = document.getElementById("embedButton");
+const embedMethod = document.getElementById("embedMethod");
+const stegoLabel = document.getElementById("stegoLabel");
+const stegoSecond = document.getElementById("stegoSecond");
+const stegoPreview2 = document.getElementById("stegoPreview2");
+const stegoLabel2 = document.getElementById("stegoLabel2");
+const downloadButton2 = document.getElementById("downloadButton2");
 const generateKeyButton = document.getElementById("generateKeyButton");
 const toggleKeyButton = document.getElementById("toggleKeyButton");
 const copyKeyButton = document.getElementById("copyKeyButton");
@@ -121,6 +127,8 @@ function resetEmbedPreview() {
         "<span>Stego image will appear here</span>";
 
     downloadButton.classList.add("hidden");
+    resetSecondStego();
+    stegoLabel.textContent = "Stego Image";
 
     hideNotification(embedNotification);
 
@@ -233,6 +241,8 @@ embedImage.addEventListener("change", function () {
         "<span>Stego image will appear here</span>";
 
     downloadButton.classList.add("hidden");
+    resetSecondStego();
+    stegoLabel.textContent = "Stego Image";
 
     hideNotification(embedNotification);
 
@@ -394,7 +404,7 @@ embedButton.addEventListener("click", async function () {
     embedButton.disabled = true;
     showNotification(
         embedNotification,
-        "Mengenkripsi pesan dan menyisipkan dengan metode LSBM...",
+        "Mengenkripsi pesan dan menyisipkan ke gambar...",
         "info"
     );
 
@@ -403,6 +413,7 @@ embedButton.addEventListener("click", async function () {
         formData.append("image", image);
         formData.append("message", message);
         formData.append("password", password);
+        formData.append("method", embedMethod.value);
 
         const response = await fetch("/api/embed", {
             method: "POST",
@@ -415,24 +426,26 @@ embedButton.addEventListener("click", async function () {
             throw new Error(data.error || "Gagal melakukan proses embed.");
         }
 
-        currentStegoDataURL = data.stego_image;
+        const hasil = data.results || [
+            { method: "matching", label: "LSB Matching", image: data.stego_image }
+        ];
 
-        stegoPreview.innerHTML = "";
-        const img = document.createElement("img");
-        img.src = data.stego_image;
-        img.alt = "Stego image preview";
-        stegoPreview.appendChild(img);
+        currentStegoDataURL = hasil[0].image;
+        showStegoResult(stegoPreview, stegoLabel, downloadButton, hasil[0]);
 
-        if (downloadButton.tagName === "A") {
-            downloadButton.href = data.stego_image;
-            downloadButton.download = "stego_lsbm.png";
+        if (hasil.length > 1) {
+            stegoSecond.classList.remove("hidden");
+            showStegoResult(stegoPreview2, stegoLabel2, downloadButton2, hasil[1]);
+        } else {
+            resetSecondStego();
         }
-
-        downloadButton.classList.remove("hidden");
 
         showNotification(
             embedNotification,
-            `Berhasil! Pesan terenkripsi (${data.payload_size} byte) disisipkan ke gambar PNG.`,
+            hasil.length > 1
+                ? `Berhasil! Payload terenkripsi (${data.payload_size} byte) ditanam dengan dua metode: ` +
+                  `${hasil.map(h => h.label).join(" dan ")} (payload dan posisi piksel sama).`
+                : `Berhasil! Pesan terenkripsi (${data.payload_size} byte) disisipkan dengan ${hasil[0].label}.`,
             "success"
         );
     } catch (err) {
@@ -550,6 +563,33 @@ window.addEventListener("beforeunload", function () {
     }
 
 });
+
+
+// =====================================
+// TAMPILAN HASIL EMBED (satu atau dua metode)
+// =====================================
+
+function showStegoResult(previewEl, labelEl, linkEl, hasil) {
+    previewEl.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = hasil.image;
+    img.alt = "Stego image preview (" + hasil.label + ")";
+    previewEl.appendChild(img);
+
+    labelEl.textContent = "Stego Image — " + hasil.label;
+
+    linkEl.href = hasil.image;
+    linkEl.download = "stego_" + hasil.method + ".png";
+    linkEl.textContent = "↓ Download " + hasil.label + " (PNG)";
+    linkEl.classList.remove("hidden");
+}
+
+function resetSecondStego() {
+    stegoSecond.classList.add("hidden");
+    stegoPreview2.innerHTML = "<span>Stego image will appear here</span>";
+    stegoLabel2.textContent = "Stego Image";
+    downloadButton2.classList.add("hidden");
+}
 
 
 // =====================================

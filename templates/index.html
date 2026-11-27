@@ -191,6 +191,23 @@
                 </div>
 
 
+                <label class="field-label" for="embedMethod">
+                    Embedding Method
+                </label>
+
+                <select id="embedMethod">
+                    <option value="matching">LSB Matching (±1)</option>
+                    <option value="replacement">LSB Replacement</option>
+                    <option value="both">Keduanya (untuk perbandingan)</option>
+                </select>
+
+                <p class="method-note">
+                    Pilihan "Keduanya": pesan dienkripsi satu kali, lalu ditanam dengan kedua
+                    metode memakai payload dan posisi piksel yang sama. Extract bekerja untuk
+                    gambar hasil metode mana pun.
+                </p>
+
+
                 <button
                     class="primary-button full-button"
                     id="embedButton"
@@ -227,7 +244,7 @@
                 </div>
 
                 <div class="preview-info">
-                    <span>Stego Image</span>
+                    <span id="stegoLabel">Stego Image</span>
                     <span class="preview-tag">OUTPUT</span>
                 </div>
 
@@ -239,6 +256,29 @@
                 >
                     ↓ Download Stego PNG
                 </a>
+
+
+                <!-- HASIL KEDUA (hanya muncul pada pilihan "Keduanya") -->
+                <div class="stego-second hidden" id="stegoSecond">
+
+                    <div class="preview-box result-preview" id="stegoPreview2">
+                        <span>Stego image will appear here</span>
+                    </div>
+
+                    <div class="preview-info">
+                        <span id="stegoLabel2">Stego Image</span>
+                        <span class="preview-tag">OUTPUT</span>
+                    </div>
+
+                    <a
+                        id="downloadButton2"
+                        class="download-button hidden"
+                        download="stego-image-2.png"
+                    >
+                        ↓ Download Stego PNG
+                    </a>
+
+                </div>
 
             </div>
 

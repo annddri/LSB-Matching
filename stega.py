@@ -69,7 +69,10 @@ def get_rng(password: str) -> np.random.Generator:
     return np.random.default_rng(int.from_bytes(seed_bytes, "big"))
 
 
-def embed_lsbm(image: Image.Image, secret_bytes: bytes, password: str) -> Image.Image:
+def _siapkan_embed(image: Image.Image, secret_bytes: bytes, password: str):
+    """Langkah yang SAMA untuk semua metode embed: piksel, bit, dan posisi.
+    Dengan begitu LSB Matching dan LSB Replacement memakai bit dan posisi piksel
+    yang identik; perbedaannya hanya pada aturan mengubah nilai piksel."""
     rgb_img = image.convert("RGB")
     width, height = rgb_img.size
     flat_pixels = np.array(rgb_img, dtype=np.int16).flatten()
@@ -83,7 +86,13 @@ def embed_lsbm(image: Image.Image, secret_bytes: bytes, password: str) -> Image.
 
     rng = get_rng(password)
     indices = rng.permutation(len(flat_pixels))[: len(bits)]
-    directions = rng.choice([-1, 1], size=len(bits))
+    directions = rng.choice([-1, 1], size=len(bits))   # hanya dipakai LSB Matching
+    return flat_pixels, bits, indices, directions, (height, width)
+
+
+def embed_lsbm(image: Image.Image, secret_bytes: bytes, password: str) -> Image.Image:
+    """LSB Matching: bila LSB berbeda dari bit pesan, nilai piksel +1 atau -1 (acak)."""
+    flat_pixels, bits, indices, directions, (height, width) = _siapkan_embed(image, secret_bytes, password)
 
     for idx, target_bit, step in zip(indices, bits, directions):
         val = flat_pixels[idx]
@@ -97,6 +106,26 @@ def embed_lsbm(image: Image.Image, secret_bytes: bytes, password: str) -> Image.
 
     stego_array = np.clip(flat_pixels, 0, 255).astype(np.uint8).reshape((height, width, 3))
     return Image.fromarray(stego_array, mode="RGB")
+
+
+def embed_lsb_replacement(image: Image.Image, secret_bytes: bytes, password: str) -> Image.Image:
+    """LSB Replacement: bit terakhir piksel langsung DIGANTI dengan bit pesan.
+    Nilai genap hanya bisa naik, nilai ganjil hanya bisa turun (pola yang dikenali chi-square)."""
+    flat_pixels, bits, indices, _, (height, width) = _siapkan_embed(image, secret_bytes, password)
+
+    flat_pixels[indices] = (flat_pixels[indices] & 0xFE) | bits
+
+    stego_array = flat_pixels.astype(np.uint8).reshape((height, width, 3))
+    return Image.fromarray(stego_array, mode="RGB")
+
+
+# Daftar metode embed: kunci -> (label, fungsi).
+# Ekstraksi IDENTIK untuk semua metode (membaca LSB pada urutan yang sama),
+# jadi extract_lsbm dipakai untuk gambar hasil metode mana pun.
+METODE_EMBED = {
+    "matching": ("LSB Matching", embed_lsbm),
+    "replacement": ("LSB Replacement", embed_lsb_replacement),
+}
 
 
 def extract_lsbm(image: Image.Image, password: str) -> bytes:
@@ -145,17 +174,37 @@ def api_embed():
         if not password:
             return jsonify({"error": "Password enkripsi belum diisi."}), 400
 
+        method = request.form.get("method", "matching")
+        if method == "both":
+            daftar_metode = ["matching", "replacement"]
+        elif method in METODE_EMBED:
+            daftar_metode = [method]
+        else:
+            return jsonify({"error": "Metode embed tidak dikenal."}), 400
+
         img = Image.open(file.stream)
+
+        # Enkripsi SATU kali. Payload yang sama dipakai semua metode,
+        # sehingga perbandingan antar metode adil (salt dan nonce tidak berbeda).
         encrypted_payload = encrypt_message(message, password)
-        stego_img = embed_lsbm(img, encrypted_payload, password)
 
-        buf = io.BytesIO()
-        stego_img.save(buf, format="PNG")
-        png_bytes = buf.getvalue()
+        results = []
+        for kunci in daftar_metode:
+            label, fungsi = METODE_EMBED[kunci]
+            stego_img = fungsi(img, encrypted_payload, password)
 
-        stego_b64 = base64.b64encode(png_bytes).decode("utf-8")
+            buf = io.BytesIO()
+            stego_img.save(buf, format="PNG")
+            stego_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+            results.append({
+                "method": kunci,
+                "label": label,
+                "image": f"data:image/png;base64,{stego_b64}"
+            })
+
         return jsonify({
-            "stego_image": f"data:image/png;base64,{stego_b64}",
+            "stego_image": results[0]["image"],   # kompatibel dengan versi lama
+            "results": results,
             "payload_size": len(encrypted_payload)
         })
     except ValueError as ve:
