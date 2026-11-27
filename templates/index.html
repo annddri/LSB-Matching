@@ -501,6 +501,37 @@
 
                 <div class="eval-verdict" id="evalVerdict"></div>
 
+                <!-- CHI-SQUARE ATTACK -->
+                <div class="chi-box">
+
+                    <div class="chi-title">Chi-Square Attack (deteksi LSB replacement)</div>
+
+                    <div class="chi-table-wrap">
+                        <table class="chi-table">
+                            <thead>
+                                <tr>
+                                    <th>Kanal</th>
+                                    <th>p-value Asli</th>
+                                    <th>p-value Stego</th>
+                                    <th>Status Stego</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chiBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="chi-verdict" id="chiVerdict"></div>
+
+                    <p class="chart-note">
+                        Cara membaca: p-value mendekati 1 berarti jumlah piksel bernilai genap dan ganjil
+                        pada tiap pasangan (2k, 2k+1) terlalu seimbang, ciri LSB replacement. p-value
+                        mendekati 0 berarti distribusinya tampak alami. Uji ini hanya andal bila pesan
+                        mengisi hampir seluruh kapasitas gambar. Hasil "tidak terindikasi" bukan bukti
+                        tidak ada pesan.
+                    </p>
+
+                </div>
+
                 <div class="chart-header">
                     <label class="field-label" for="channel-select">Histogram</label>
 

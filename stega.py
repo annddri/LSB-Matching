@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-from evaluasi import evaluasi, histogram_data  # modul Orang 3
+from evaluasi import evaluasi, histogram_data, chi_square  # modul Orang 3
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 2 gambar x 10 MB (halaman evaluasi)
@@ -265,8 +265,15 @@ def api_evaluate():
         if hasil["psnr"] == float("inf"):   # JSON standar tidak mengenal Infinity
             hasil["psnr"] = None
 
+        # Chi-square attack per kanal (R, G, B) untuk gambar asli dan stego
+        chi = {
+            "original": {n: chi_square(asli[..., i]) for i, n in enumerate("RGB")},
+            "stego": {n: chi_square(stego[..., i]) for i, n in enumerate("RGB")},
+        }
+
         return jsonify({
             "evaluasi": hasil,
+            "chi_square": chi,
             "ukuran": {"lebar": int(asli.shape[1]), "tinggi": int(asli.shape[0])},
             "histogram": {
                 "original": histogram_data(asli),

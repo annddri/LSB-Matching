@@ -737,6 +737,69 @@ function verdictText(e) {
     return "PSNR di bawah 30 dB: distorsi cukup terlihat.";
 }
 
+// Ambang indikasi chi-square attack: p-value >= 0,95 dianggap terindikasi ada pesan.
+const CHI_THRESHOLD = 0.95;
+
+function formatP(p) {
+    if (p === null || p === undefined) return "n/a";
+    return p.toLocaleString("id-ID", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+}
+
+function showChiSquare(chi) {
+    const chiBody = document.getElementById("chiBody");
+    const chiVerdict = document.getElementById("chiVerdict");
+    chiBody.innerHTML = "";
+
+    let terindikasi = 0;
+    let bisaDiuji = 0;
+
+    ["R", "G", "B"].forEach(function (kanal) {
+        const pAsli = chi.original[kanal].p_value;
+        const pStego = chi.stego[kanal].p_value;
+
+        let status, kelas;
+        if (pStego === null) {
+            status = "Tidak bisa diuji";
+            kelas = "chi-na";
+        } else {
+            bisaDiuji += 1;
+            if (pStego >= CHI_THRESHOLD) {
+                status = "Terindikasi";
+                kelas = "chi-flag";
+                terindikasi += 1;
+            } else {
+                status = "Tidak terindikasi";
+                kelas = "chi-ok";
+            }
+        }
+
+        const tr = document.createElement("tr");
+        [kanal, formatP(pAsli), formatP(pStego), status].forEach(function (teks, i) {
+            const td = document.createElement("td");
+            td.textContent = teks;
+            if (i === 3) td.className = kelas;
+            tr.appendChild(td);
+        });
+        chiBody.appendChild(tr);
+    });
+
+    if (bisaDiuji === 0) {
+        chiVerdict.className = "chi-verdict";
+        chiVerdict.textContent = "Gambar terlalu kecil atau terlalu seragam untuk diuji chi-square.";
+    } else if (terindikasi > 0) {
+        chiVerdict.className = "chi-verdict flag";
+        chiVerdict.textContent =
+            `Chi-square mengindikasikan data tersembunyi pada ${terindikasi} dari ${bisaDiuji} kanal ` +
+            "(pola LSB replacement: pasangan nilai terlalu seimbang).";
+    } else {
+        chiVerdict.className = "chi-verdict ok";
+        chiVerdict.textContent =
+            "Chi-square tidak menemukan pola LSB replacement pada gambar stego. " +
+            "Ini bukan bukti tidak ada pesan, dan LSB matching memang tidak terdeteksi oleh uji ini.";
+    }
+}
+
+
 function showEvaluationResult(data) {
     const e = data.evaluasi;
     const f = formatEvaluation(e);
@@ -749,6 +812,8 @@ function showEvaluationResult(data) {
     const totalNilai = data.ukuran.lebar * data.ukuran.tinggi * 3;
     evalTotal.textContent = `dari ${totalNilai.toLocaleString("id-ID")} nilai piksel (${data.ukuran.lebar}×${data.ukuran.tinggi}, RGB)`;
     evalVerdict.textContent = verdictText(e);
+
+    showChiSquare(data.chi_square);
 
     evalResult.classList.remove("hidden");
 }

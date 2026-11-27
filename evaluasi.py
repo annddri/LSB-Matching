@@ -35,7 +35,9 @@ def chi_square(gambar):
     pakai = harapan >= 5                       # abaikan pasangan dengan frekuensi terlalu kecil
     stat = float(np.sum((genap[pakai] - harapan[pakai]) ** 2 / harapan[pakai]))
     df = int(pakai.sum() - 1)
-    return {"chi2": stat, "df": df, "p_value": float(1 - chi2.cdf(stat, df))}
+    if df < 1:                                  # gambar terlalu kecil/seragam untuk diuji
+        return {"chi2": stat, "df": df, "p_value": None}
+    return {"chi2": stat, "df": df, "p_value": float(chi2.sf(stat, df))}
 
 
 def plot_histogram(asli, stego, path="histogram.png"):

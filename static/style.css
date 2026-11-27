@@ -969,3 +969,73 @@ footer p,
 .stego-second.hidden {
     display: none;
 }
+
+
+/* =====================================
+   CHI-SQUARE ATTACK
+===================================== */
+
+.chi-box {
+    margin-top: 22px;
+    padding: 16px;
+    background: #0c1425;
+    border: 1px solid #35415b;
+    border-radius: 10px;
+}
+
+.chi-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.chi-table-wrap {
+    overflow-x: auto;
+}
+
+.chi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.chi-table th,
+.chi-table td {
+    padding: 9px 10px;
+    text-align: left;
+    border-bottom: 1px solid #263149;
+    white-space: nowrap;
+}
+
+.chi-table th {
+    color: #929eb4;
+    font-weight: 600;
+}
+
+.chi-flag {
+    color: #ff899e;
+    font-weight: 700;
+}
+
+.chi-ok {
+    color: #62dbab;
+    font-weight: 700;
+}
+
+.chi-na {
+    color: #929eb4;
+}
+
+.chi-verdict {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.chi-verdict.flag {
+    color: #ff899e;
+}
+
+.chi-verdict.ok {
+    color: #62dbab;
+}
