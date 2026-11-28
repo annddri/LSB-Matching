@@ -11,8 +11,8 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #080d19;
-    color: #f5f7ff;
+    background: #0a0a0a;
+    color: #ffffff;
     line-height: 1.6;
 }
 
@@ -37,8 +37,8 @@ textarea {
     justify-content: space-between;
     align-items: center;
     padding: 22px 8%;
-    border-bottom: 1px solid #202b40;
-    background: #080d19;
+    border-bottom: 1px solid #242424;
+    background: #0a0a0a;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -53,11 +53,11 @@ textarea {
 }
 
 .logo > span:last-child {
-    color: #9a8cff;
+    color: #ff4d52;
 }
 
 .logo-icon {
-    background: #7866ef;
+    background: #ec1d24;
     color: white;
     padding: 4px 10px;
     border-radius: 9px;
@@ -66,17 +66,17 @@ textarea {
 .nav-links {
     display: flex;
     gap: 32px;
-    color: #aab4c7;
+    color: #b8b8b8;
     font-size: 13px;
 }
 
 .nav-links a:hover {
-    color: #a99aff;
+    color: #ff4d52;
 }
 
 .nav-button {
     padding: 10px 19px;
-    background: #7866ef;
+    background: #ec1d24;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
@@ -98,10 +98,10 @@ textarea {
     background:
         radial-gradient(
             ellipse at 80% 45%,
-            #28235a 0%,
+            #4a0b0e 0%,
             transparent 45%
         ),
-        #080d19;
+        #0a0a0a;
 }
 
 .hero-content {
@@ -112,7 +112,7 @@ textarea {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: #a99aff;
+    color: #ff4d52;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -134,11 +134,11 @@ textarea {
 }
 
 .hero h1 span {
-    color: #9b89ff;
+    color: #ff4d52;
 }
 
 .hero-content > p {
-    color: #aab4c7;
+    color: #b8b8b8;
     max-width: 510px;
     font-size: 15px;
     margin-bottom: 30px;
@@ -165,12 +165,12 @@ textarea {
 }
 
 .primary-button {
-    background: #7866ef;
+    background: #ec1d24;
     color: white;
 }
 
 .primary-button:hover {
-    background: #9384ff;
+    background: #ff3b41;
     transform: translateY(-2px);
 }
 
@@ -181,13 +181,13 @@ textarea {
 }
 
 .secondary-button {
-    border: 1px solid #39435b;
+    border: 1px solid #404040;
     color: white;
     background: transparent;
 }
 
 .secondary-button:hover {
-    background: #182139;
+    background: #1c1c1c;
 }
 
 .hero-features {
@@ -195,7 +195,7 @@ textarea {
     flex-wrap: wrap;
     gap: 18px;
     margin-top: 35px;
-    color: #aab4c7;
+    color: #b8b8b8;
     font-size: 11px;
 }
 
@@ -211,8 +211,8 @@ textarea {
 }
 
 .visual-card {
-    background: #121b30;
-    border: 1px solid #384363;
+    background: #181818;
+    border: 1px solid #444444;
     border-radius: 17px;
     padding: 20px;
     box-shadow: 0 20px 70px #0008;
@@ -224,7 +224,7 @@ textarea {
     align-items: center;
     justify-content: space-between;
     font-size: 10px;
-    color: #aab4c7;
+    color: #b8b8b8;
     letter-spacing: 1px;
 }
 
@@ -236,14 +236,14 @@ textarea {
 }
 
 .lock-icon {
-    color: #a99aff;
+    color: #ff4d52;
     font-size: 20px;
 }
 
 .visual-image {
     margin: 20px 0;
     height: 200px;
-    background: linear-gradient(135deg, #35346e, #171e39);
+    background: linear-gradient(135deg, #5a0f13, #1a0a0b);
     border-radius: 11px;
     display: flex;
     flex-direction: column;
@@ -253,7 +253,7 @@ textarea {
 
 .image-symbol {
     font-size: 65px;
-    color: #b4a8ff;
+    color: #ff7a7e;
 }
 
 .visual-image p {
@@ -263,7 +263,7 @@ textarea {
 
 .visual-image span {
     font-size: 10px;
-    color: #aab4c7;
+    color: #b8b8b8;
 }
 
 .visual-bottom strong {
@@ -274,7 +274,7 @@ textarea {
     position: absolute;
     right: -20px;
     bottom: -20px;
-    background: #7866ef;
+    background: #ec1d24;
     border-radius: 13px;
     padding: 14px;
     font-size: 23px;
@@ -287,7 +287,7 @@ textarea {
 
 .workspace {
     padding: 85px 10%;
-    background: #0c1323;
+    background: #101010;
 }
 
 .section-heading {
@@ -296,7 +296,7 @@ textarea {
 }
 
 .section-label {
-    color: #a99aff;
+    color: #ff4d52;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -308,7 +308,7 @@ textarea {
 }
 
 .section-heading p {
-    color: #929eb4;
+    color: #a3a3a3;
     font-size: 13px;
 }
 
@@ -326,8 +326,8 @@ textarea {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
 
-    background: #121b30;
-    border: 1px solid #27334a;
+    background: #181818;
+    border: 1px solid #2e2e2e;
     border-radius: 16px;
 }
 
@@ -336,7 +336,7 @@ textarea {
     font-size: 12px;
     font-weight: 700;
     margin: 19px 0 10px;
-    color: #e6e9f5;
+    color: #f0f0f0;
 }
 
 
@@ -346,8 +346,8 @@ textarea {
 
 .upload-area {
     min-height: 155px;
-    border: 1.5px dashed #525d7c;
-    background: #18233a;
+    border: 1.5px dashed #5a5a5a;
+    background: #1a1a1a;
     border-radius: 11px;
 
     display: flex;
@@ -361,13 +361,13 @@ textarea {
 }
 
 .upload-area:hover {
-    border-color: #9b89ff;
-    background: #202b47;
+    border-color: #ff4d52;
+    background: #2a1214;
 }
 
 .upload-icon {
     font-size: 30px;
-    color: #a99aff;
+    color: #ff4d52;
 }
 
 .upload-area strong {
@@ -376,7 +376,7 @@ textarea {
 
 .upload-area span {
     font-size: 11px;
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 .upload-area input {
@@ -404,9 +404,9 @@ textarea {
 }
 
 .remove-image {
-    border: 1px solid #75404e;
-    background: #351c2b;
-    color: #ff899e;
+    border: 1px solid #75561f;
+    background: #2b1f10;
+    color: #ffb454;
     padding: 8px 12px;
     border-radius: 7px;
     font-size: 11px;
@@ -415,7 +415,7 @@ textarea {
 }
 
 .remove-image:hover {
-    background: #512537;
+    background: #4a3414;
 }
 
 
@@ -429,8 +429,8 @@ textarea,
 .extract-card input[type="password"] {
     width: 100%;
     padding: 13px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     color: white;
     border-radius: 8px;
     outline: none;
@@ -444,7 +444,7 @@ textarea {
 textarea:focus,
 #embedPassword:focus,
 input[type="password"]:focus {
-    border-color: #9685ff;
+    border-color: #ff4d52;
 }
 
 .full-button {
@@ -459,8 +459,8 @@ input[type="password"]:focus {
 
 .preview-box {
     height: 170px;
-    border: 1px dashed #45516c;
-    background: #0c1425;
+    border: 1px dashed #4a4a4a;
+    background: #141414;
     border-radius: 10px;
 
     display: flex;
@@ -468,7 +468,7 @@ input[type="password"]:focus {
     justify-content: center;
 
     overflow: hidden;
-    color: #7e8aa2;
+    color: #8c8c8c;
     font-size: 12px;
 }
 
@@ -479,19 +479,19 @@ input[type="password"]:focus {
 }
 
 .result-preview {
-    border-color: #7866ef;
+    border-color: #ec1d24;
 }
 
 .preview-info {
     display: flex;
     justify-content: space-between;
     margin: 9px 0 15px;
-    color: #aab4c7;
+    color: #b8b8b8;
     font-size: 11px;
 }
 
 .preview-tag {
-    color: #a99aff;
+    color: #ff4d52;
     font-weight: 700;
 }
 
@@ -517,7 +517,7 @@ input[type="password"]:focus {
 ===================================== */
 
 .extract-section {
-    background: #080d19;
+    background: #0a0a0a;
 }
 
 .extract-card {
@@ -525,8 +525,8 @@ input[type="password"]:focus {
     margin: auto;
     padding: 35px;
 
-    background: #121b30;
-    border: 1px solid #27334a;
+    background: #181818;
+    border: 1px solid #2e2e2e;
     border-radius: 16px;
 }
 
@@ -538,8 +538,8 @@ input[type="password"]:focus {
 .extract-preview-container {
     margin-top: 15px;
     padding: 12px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     border-radius: 10px;
 }
 
@@ -552,7 +552,7 @@ input[type="password"]:focus {
     justify-content: center;
 
     overflow: hidden;
-    background: #080d19;
+    background: #0a0a0a;
     border-radius: 8px;
 }
 
@@ -579,13 +579,13 @@ input[type="password"]:focus {
 
 .extract-image-info strong {
     font-size: 12px;
-    color: #f5f7ff;
+    color: #ffffff;
     overflow-wrap: anywhere;
 }
 
 .extract-image-info span {
     font-size: 11px;
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 
@@ -600,10 +600,10 @@ input[type="password"]:focus {
 #extractedMessage {
     min-height: 90px;
     padding: 15px;
-    border: 1px solid #35415b;
-    background: #0c1425;
+    border: 1px solid #3a3a3a;
+    background: #141414;
     border-radius: 9px;
-    color: #929eb4;
+    color: #a3a3a3;
     font-size: 12px;
     overflow-wrap: anywhere;
 }
@@ -628,15 +628,15 @@ input[type="password"]:focus {
 }
 
 .notification.error {
-    background: #3c202a;
-    border: 1px solid #8a4055;
-    color: #ff9caf;
+    background: #2e2110;
+    border: 1px solid #8a6024;
+    color: #ffc27a;
 }
 
 .notification.info {
-    background: #1d2d50;
-    border: 1px solid #465f98;
-    color: #b4c8ff;
+    background: #262626;
+    border: 1px solid #4d4d4d;
+    color: #dcdcdc;
 }
 
 
@@ -678,7 +678,7 @@ input[type="password"]:focus {
 
 footer {
     padding: 35px 8%;
-    border-top: 1px solid #202b40;
+    border-top: 1px solid #242424;
 
     display: flex;
     align-items: center;
@@ -689,7 +689,7 @@ footer {
 
 footer p,
 .copyright {
-    color: #7e8aa2;
+    color: #8c8c8c;
     font-size: 11px;
 }
 
@@ -792,8 +792,8 @@ footer p,
     margin: auto;
     padding: 35px;
 
-    background: #121b30;
-    border: 1px solid #27334a;
+    background: #181818;
+    border: 1px solid #2e2e2e;
     border-radius: 16px;
 }
 
@@ -806,7 +806,7 @@ footer p,
 .eval-result {
     margin-top: 28px;
     padding-top: 24px;
-    border-top: 1px solid #27334a;
+    border-top: 1px solid #2e2e2e;
 }
 
 .eval-result.hidden {
@@ -824,26 +824,26 @@ footer p,
     flex-direction: column;
     gap: 4px;
     padding: 12px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     border-radius: 10px;
 }
 
 .eval-label {
     font-size: 11px;
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 .eval-value {
     font-size: 17px;
     font-weight: 700;
-    color: #a99aff;
+    color: #ff4d52;
     overflow-wrap: anywhere;
 }
 
 .eval-hint {
     font-size: 10px;
-    color: #6f7b96;
+    color: #7a7a7a;
 }
 
 .eval-verdict {
@@ -862,8 +862,8 @@ footer p,
 
 .chart-header select {
     padding: 9px 12px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     border-radius: 8px;
     color: white;
     font-size: 12px;
@@ -888,7 +888,7 @@ footer p,
     gap: 18px;
     margin-top: 12px;
     font-size: 11px;
-    color: #c6cde0;
+    color: #d4d4d4;
 }
 
 .chart-legend span {
@@ -905,18 +905,18 @@ footer p,
 }
 
 .legend-stego {
-    border-color: #18856e;
+    border-color: #ec1d24;
 }
 
 .legend-original {
-    border-color: #737f89;
+    border-color: #7a7a7a;
     border-top-style: dashed;
 }
 
 .chart-note {
     margin-top: 10px;
     font-size: 11px;
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 @media (max-width: 850px) {
@@ -943,8 +943,8 @@ footer p,
 #embedMethod {
     width: 100%;
     padding: 13px 14px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     border-radius: 9px;
     color: white;
     font-size: 13px;
@@ -952,14 +952,14 @@ footer p,
 }
 
 #embedMethod:focus {
-    border-color: #8b79ff;
+    border-color: #ec1d24;
 }
 
 .method-note {
     margin-top: 8px;
     font-size: 11px;
     line-height: 1.6;
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 .stego-second {
@@ -978,8 +978,8 @@ footer p,
 .chi-box {
     margin-top: 22px;
     padding: 16px;
-    background: #0c1425;
-    border: 1px solid #35415b;
+    background: #141414;
+    border: 1px solid #3a3a3a;
     border-radius: 10px;
 }
 
@@ -1003,17 +1003,17 @@ footer p,
 .chi-table td {
     padding: 9px 10px;
     text-align: left;
-    border-bottom: 1px solid #263149;
+    border-bottom: 1px solid #2a2a2a;
     white-space: nowrap;
 }
 
 .chi-table th {
-    color: #929eb4;
+    color: #a3a3a3;
     font-weight: 600;
 }
 
 .chi-flag {
-    color: #ff899e;
+    color: #ffb454;
     font-weight: 700;
 }
 
@@ -1023,7 +1023,7 @@ footer p,
 }
 
 .chi-na {
-    color: #929eb4;
+    color: #a3a3a3;
 }
 
 .chi-verdict {
@@ -1033,7 +1033,7 @@ footer p,
 }
 
 .chi-verdict.flag {
-    color: #ff899e;
+    color: #ffb454;
 }
 
 .chi-verdict.ok {

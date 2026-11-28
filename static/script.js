@@ -983,7 +983,7 @@ function drawHistogram() {
   // Gambar Stego terlebih dahulu
   drawLine(
     stego,
-    '#18856e',
+    '#ec1d24',
     false,
     2.3
   );
@@ -991,7 +991,7 @@ function drawHistogram() {
   // Gambar Asli di atas Stego agar tetap terlihat
   drawLine(
     original,
-    '#737f89',
+    '#7a7a7a',
     true,
     2.5
   );
